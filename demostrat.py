@@ -2,8 +2,6 @@
 TODO: Add stoploss
 TODO: dynamic lots/quantity (change with profit/loss)
 """
-from cmath import nan
-from numpy import Inf, NaN
 import pandas as pd
 from technical import *
 import datetime
@@ -80,7 +78,7 @@ for i in range(65, len(data)):
             entryprice.append(low[i - 1])
             currpos = 'sell'
 
-exitprice.append(NaN)
+exitprice.append(None)
 output = pd.DataFrame()
 
 data = {
