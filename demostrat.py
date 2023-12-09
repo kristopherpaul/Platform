@@ -2,6 +2,8 @@
 TODO: Add stoploss
 TODO: dynamic lots/quantity (change with profit/loss)
 """
+
+# ---------------------------------------------------Preprocessing---------------------------------------------------------------
 import pandas as pd
 from technical import *
 import datetime
@@ -16,8 +18,13 @@ data = TimeMatrix(papadata)
 expavg = xavg(data.close, 65)
 high = highest(data.high, 10)
 low = lowest(data.low, 10)
+# -------------------------------------------------------------------------------------------------------------------------------
 
-def buy(data: TimeMatrix, i: int):
+# Strategy begins
+
+transit = None
+
+def long(data: TimeMatrix, i: int):
     global transit
     if data.close[i] > expavg[i] and transit != 'buy':
         transit = 'buy'
@@ -31,7 +38,7 @@ def buy(data: TimeMatrix, i: int):
         return False
     return False
 
-def sell(data: TimeMatrix, i: int):
+def short(data: TimeMatrix, i: int):
     global transit
     if data.close[i] < expavg[i] and transit != 'sell':
         transit = 'sell'
@@ -46,34 +53,33 @@ def sell(data: TimeMatrix, i: int):
     return False
 
 currpos = None
-values = []
+signal = []
 timestamps = []
 entryprice = []
 exitprice = []
-transit = None
 for i in range(65, len(data)):
     if currpos == 'buy':
-        if sell(data, i):
-            values.append('sell')
+        if short(data, i):
+            signal.append('sell')
             timestamps.append(data.time[i])
             entryprice.append(low[i - 1])
             exitprice.append(low[i - 1])
             currpos = 'sell'
     elif currpos == 'sell':
-        if buy(data, i):
-            values.append('buy')
+        if long(data, i):
+            signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(high[i - 1])
             exitprice.append(high[i - 1])
             currpos = 'buy'
     else:
-        if buy(data, i):
-            values.append('buy')
+        if long(data, i):
+            signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(high[i - 1])
             currpos = 'buy'
         else:
-            values.append('sell')
+            signal.append('sell')
             timestamps.append(data.time[i])
             entryprice.append(low[i - 1])
             currpos = 'sell'
@@ -83,7 +89,7 @@ output = pd.DataFrame()
 
 data = {
     'Timestamp': timestamps,
-    'Signal': values,
+    'Signal': signal,
     'EntryPrice': entryprice,
     'ExitPrice': exitprice,
 }
