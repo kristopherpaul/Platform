@@ -5,7 +5,7 @@ Time Vector is always a series of values indexed by timestamps
 """
 
 """
-1. TODO: type hint for everything
+1. TODO: type hint everything
 2. TODO: use @overload wherever necessary
 3. TODO: implement binary search for indexing using datetime
 4. TODO: write code for error handling wherever necessary
@@ -68,7 +68,6 @@ class TimeArray:
 
 
 class TimeMatrix:
-
     def __init__(self, data):
         """ 
         data must have a time column indexed by 'time'
