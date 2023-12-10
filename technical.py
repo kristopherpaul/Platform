@@ -3,7 +3,7 @@ TODO: Write the documentation for functions
 TODO: make naming more consistent
 """
 from data_structures import *
-Inf = -9999999
+from numpy import Inf
 
 def true_high(data: TimeMatrix):
     values = [data.high[0]]
@@ -30,7 +30,7 @@ def avg(x: TimeArray, period: int):
     values = []
     window_sum = 0
     for i in range(period - 1):
-        values.append(nan)
+        values.append(None)
         window_sum += x[i]
     for j in range(period - 1, len(x)):
         window_sum += x[j]
