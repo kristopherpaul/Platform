@@ -6,6 +6,7 @@ TODO: dynamic lots/quantity (change with profit/loss)
 # ---------------------------------------------------Preprocessing---------------------------------------------------------------
 import pandas as pd
 from technical import *
+import matplotlib.pyplot as plt
 import datetime
 papadata = pd.read_csv('NIFTNEAR.csv')
 papadata['time'] = papadata['time'].apply(lambda x: "0" * (4 - len(str(x))) + str(x))
@@ -89,15 +90,35 @@ for i in range(65, len(data)):
 exitprice.append(None)
 output = pd.DataFrame()
 
-data = {
+dfdata = {
     'Timestamp': timestamps,
     'Signal': signal,
     'EntryPrice': entryprice,
     'ExitPrice': exitprice,
 }
 
-df = pd.DataFrame(data)
+df = pd.DataFrame(dfdata)
 
 df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 df.set_index('Timestamp', inplace=True)
 df.to_csv('signal.csv')
+
+cumpnl = [0]
+lot = 50 # lot size of nifty in F&O market
+
+for i in range(len(df) - 1):
+    pnl = df['ExitPrice'][i] - df['EntryPrice'][i]
+    pnl *= lot
+    if df['Signal'][i] == 'sell':
+        pnl *= -1
+    cumpnl.append(cumpnl[-1] + pnl)
+
+dfdata = {
+    'trade number': [i for i in range(1, len(df) + 1)],
+    'cumulative P&L': cumpnl
+}
+
+pnldf = pd.DataFrame(dfdata)
+pnldf.set_index('trade number', inplace=True)
+plt.plot(pnldf)
+plt.show()
