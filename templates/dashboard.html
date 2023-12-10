@@ -12,7 +12,7 @@
   <style type="text/css" media="screen">
     #editor { 
         position: absolute;
-        top: 4rem;
+        top: 4.5rem;
         right: 0;
         bottom: 0;
         left: 0;
@@ -31,6 +31,8 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="static/js/main.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -145,7 +147,8 @@
         <div class="col-lg-6 col-md-6 mb-4">
           <div class="card h-100">
           <div class="card-header pb-0">
-          <h5 class="font-weight-bolder">Code</h5>
+          <h5 class="font-weight-bolder" style="float: left;">Code</h5>
+          <button class="btn btn-outline-primary btn-sm mb-0" style="float: right;" onclick="simulate();">Simulate</button>
           </div>
           <div class="card-body p-3" style="height: 70vh;">
             <div id="editor" style="border-radius: 0rem 0rem 1rem 1rem;">print('Hello World!')</div>
@@ -376,7 +379,7 @@
     gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
     gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
 
-    new Chart(ctx2, {
+    var pnl_chart = new Chart(ctx2, {
       type: "line",
       data: {
         labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],

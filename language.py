@@ -4,17 +4,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Strategy:
+    params = {}
+    positions = []
+    
     def __init__(self, name, universe, criteria=None, qty_type=None):
         pass
     
-    def entry(self, id, direction, qty, limit=None):
+    def entry(self, id: str, direction: str, qty: int, limit: int = None):
         pass
 
-    def exit(self, id, from_entry, qty, take_profit=None, stop_loss=None):
+    def exit(self, id: str, from_entry=None, qty: int, take_profit=None, stop_loss=None):
+        pass
+
+    def exit_all(self):
         pass
 
     def param(self, id, value, optimize=False):
-        pass
+        self.params[id] = value
 
 
 def plot(data1, data2):
