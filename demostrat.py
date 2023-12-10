@@ -57,6 +57,8 @@ signal = []
 timestamps = []
 entryprice = []
 exitprice = []
+
+# Backtesting Loop
 for i in range(65, len(data)):
     if currpos == 'buy':
         if short(data, i):

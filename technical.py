@@ -3,7 +3,7 @@ TODO: Write the documentation for functions
 TODO: make naming more consistent
 """
 from data_structures import *
-from numpy import Inf
+Inf = -9999999
 
 def true_high(data: TimeMatrix):
     values = [data.high[0]]
