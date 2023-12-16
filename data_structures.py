@@ -81,5 +81,12 @@ class TimeMatrix:
         self.end = self.time[-1]
         self.step = self.time[1] - self.time[0]
 
+    def __getitem__(self, i):
+        return { "timestamp": self.time[i],
+                 "open": self.open[i],
+                 "high": self.high[i],
+                 "low": self.low[i],
+                 "close": self.close[i] }
+
     def __len__(self):
         return len(self.open)
