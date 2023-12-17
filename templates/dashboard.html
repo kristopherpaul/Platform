@@ -32,6 +32,7 @@
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
   <script src="static/js/main.js"></script>
 </head>
 
@@ -162,7 +163,7 @@
         </div>
         <div class="card-body p-3">
           <div class="chart">
-            <canvas id="chart-line" class="chart-canvas" height="600" width="948" style="display: block; box-sizing: border-box; height: 300px; width: 474px;"></canvas>
+            <div id="chart-line" class="chart-canvas" height="600" width="948" style="display: block; box-sizing: border-box; height: 300px; width: 100%;"></canvas>
           </div>
           <div class="row mb-4">
             <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
@@ -364,7 +365,7 @@
       },
     });
 
-
+    /*
     var ctx2 = document.getElementById("chart-line").getContext("2d");
 
     var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
@@ -465,7 +466,7 @@
           },
         },
       },
-    });
+    });*/
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

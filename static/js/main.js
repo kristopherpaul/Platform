@@ -8,7 +8,48 @@ function simulate(){
         success: function(data){
             var obj = JSON.parse(data);
 
-            var ctx2 = document.getElementById("chart-line").getContext("2d");
+            const chartProperties = {
+                timeScale:{
+                    timeVisible: true,
+                    secondsVisible: false
+                },
+                //Dark Theme
+                layout: {
+                    background: { color: '#222' },
+                    textColor: '#DDD',
+                },
+                grid: {
+                    vertLines: { color: '#444' },
+                    horzLines: { color: '#444' },
+                },
+            };
+
+            const domElement = document.getElementById('chart-line');
+            domElement.innerHTML = "";
+            const chart = LightweightCharts.createChart(domElement,chartProperties);
+            
+            //Dark Theme
+            chart.priceScale().applyOptions({
+                borderColor: '#71649C',
+            });
+            chart.timeScale().applyOptions({
+                borderColor: '#71649C',
+            });
+            
+            //Blue Area Series
+            //const areaSeries = chart.addAreaSeries({ lineColor: '#2962FF', topColor: '#2962FF', bottomColor: 'rgba(41, 98, 255, 0.28)' });
+            //Green Area Series
+            const areaSeries = chart.addAreaSeries({topColor: 'rgba( 38, 166, 154, 0.28)',	bottomColor: 'rgba( 38, 166, 154, 0.05)', lineColor: 'rgba( 38, 166, 154, 1)', lineWidth: 2, crossHairMarkerVisible: false});
+            
+            var ts_data = [];
+            for(var i = 0;i < obj.x.length;i++){
+                ts_data.push({value: obj.y[i],time: Date.parse(obj.x[i])/1000});
+            }
+            areaSeries.setData(ts_data);
+
+            chart.timeScale().fitContent();
+
+            /*var ctx2 = document.getElementById("chart-line").getContext("2d");
 
             var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
 
@@ -91,7 +132,7 @@ function simulate(){
                 },
                 },
             },
-            });
+            });*/
         },
         error: function(errMsg){
             alert("Error"+errMsg);
