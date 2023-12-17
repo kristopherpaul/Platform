@@ -19,7 +19,7 @@ data = TimeMatrix(papadata)
 expavg = xavg(data.close, 65)
 high = highest(data.high, 10)
 low = lowest(data.low, 10)
-# -------------------------------------------------------------------------------------------------------------------------------
+# ----------------------------------i---------------------------------------------------------------------------------------------
 
 # Strategy begins
 
@@ -35,7 +35,7 @@ def long(data: TimeMatrix, i: int):
             transit = None
             return True
     if data.close[i] < expavg[i]:
-        transit = None
+        transit = 'sell'
         return False
     return False
 
@@ -49,7 +49,7 @@ def short(data: TimeMatrix, i: int):
             transit = None
             return True
     if data.close[i] > expavg[i]:
-        transit = None
+        transit = 'buy'
         return False
     return False
 
@@ -76,12 +76,12 @@ for i in range(65, len(data)):
             exitprice.append(high[i - 1])
             currpos = 'buy'
     else:
-        if long(data, i):
+        if transit != 'sell' and long(data, i):
             signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(high[i - 1])
             currpos = 'buy'
-        else:
+        if transit != 'buy' and short(data, i):
             signal.append('sell')
             timestamps.append(data.time[i])
             entryprice.append(low[i - 1])
