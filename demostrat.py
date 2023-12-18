@@ -1,5 +1,4 @@
 """
-TODO: Add stoploss
 TODO: dynamic lots/quantity (change with profit/loss)
 """
 
@@ -19,7 +18,8 @@ data = TimeMatrix(papadata)
 expavg = xavg(data.close, 65)
 high = highest(data.high, 10)
 low = lowest(data.low, 10)
-# ----------------------------------i---------------------------------------------------------------------------------------------
+atr_values = atr(data, 20)
+# -------------------------------------------------------------------------------------------------------------------------------
 
 # Strategy begins
 
@@ -53,6 +53,18 @@ def short(data: TimeMatrix, i: int):
         return False
     return False
 
+def stoploss_long(data: TimeMatrix, entryprice, i, curri):
+    lx2n = entryprice - 2 * atr_values[i]
+    if data[curri]["low"] <= lx2n:
+        return lx2n
+    return None
+
+def stoploss_short(data: TimeMatrix, entryprice, i, curri):
+    lx2n = entryprice + 2 * atr_values[i]
+    if data[curri]["high"] >= lx2n:
+        return lx2n
+    return None
+
 currpos = None
 signal = []
 timestamps = []
@@ -60,29 +72,46 @@ entryprice = []
 exitprice = []
 
 # Backtesting Loop
+
+lasti = None
 for i in range(65, len(data)):
     if currpos == 'buy':
         if short(data, i):
             signal.append('sell')
             timestamps.append(data.time[i])
-            entryprice.append(low[i - 1])
-            exitprice.append(low[i - 1])
+            entryprice.append(min(low[i - 1], data.open[i]))
+            exitprice.append(min(low[i - 1], data.open[i]))
+            lasti = i
             currpos = 'sell'
+            
+        lx2n = stoploss_long(data, entryprice[-1], lasti, i)
+        if lx2n:
+            lx2n = min(lx2n, data.open[i])
+            currpos = None
+            exitprice.append(f'π{lx2n}')
     elif currpos == 'sell':
         if long(data, i):
             signal.append('buy')
             timestamps.append(data.time[i])
-            entryprice.append(high[i - 1])
-            exitprice.append(high[i - 1])
+            entryprice.append(max(data.open[i], high[i - 1]))
+            exitprice.append(max(data.open[i], high[i - 1]))
+            lasti = i
             currpos = 'buy'
+        lx2n = stoploss_short(data, entryprice[-1], lasti, i)
+        if lx2n:
+            lx2n = max(lx2n, data.open[i])
+            currpos = None
+            exitprice.append(f'π{lx2n}')
     else:
-        if transit != 'sell' and long(data, i):
+        if long(data, i):
             signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(high[i - 1])
+            lasti = i
             currpos = 'buy'
-        if transit != 'buy' and short(data, i):
+        elif short(data, i):
             signal.append('sell')
+            lasti = i
             timestamps.append(data.time[i])
             entryprice.append(low[i - 1])
             currpos = 'sell'
@@ -107,7 +136,10 @@ cumpnl = [0]
 lot = 50 # lot size of nifty in F&O market
 
 for i in range(len(df) - 1):
-    pnl = df['ExitPrice'][i] - df['EntryPrice'][i]
+    try:
+        pnl = df['ExitPrice'][i] - df['EntryPrice'][i]
+    except:
+        pnl = float(df['ExitPrice'][i][1:]) - df['EntryPrice'][i]
     pnl *= lot
     if df['Signal'][i] == 'sell':
         pnl *= -1
@@ -117,8 +149,3 @@ dfdata = {
     'trade number': [i for i in range(1, len(df) + 1)],
     'cumulative P&L': cumpnl
 }
-
-pnldf = pd.DataFrame(dfdata)
-pnldf.set_index('trade number', inplace=True)
-plt.plot(pnldf)
-plt.show()
