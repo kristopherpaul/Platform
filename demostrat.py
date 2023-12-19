@@ -160,9 +160,7 @@ for i in range(len(df) - 1):
         pnl *= -1
     cumpnl.append(cumpnl[-1] + pnl)
 
-print(cumpnl[-1])
 dfdata = {
     'trade number': [i for i in range(1, len(df) + 1)],
     'cumulative P&L': cumpnl
 }
-
