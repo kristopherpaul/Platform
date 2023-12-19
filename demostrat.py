@@ -1,7 +1,3 @@
-"""
-TODO: dynamic lots/quantity (change with profit/loss)
-"""
-
 # ---------------------------------------------------Preprocessing---------------------------------------------------------------
 import pandas as pd
 from technical import *
@@ -25,7 +21,7 @@ atr_values = atr(data, 20)
 
 transit = None
 
-def long(data: TimeMatrix, i: int):
+def long(data: TimeMatrix, i: int): 
     global transit
     if data.close[i] > expavg[i] and transit != 'buy':
         transit = 'buy'
@@ -70,6 +66,7 @@ signal = []
 timestamps = []
 entryprice = []
 exitprice = []
+true_index = []
 
 # Backtesting Loop
 
@@ -81,6 +78,7 @@ for i in range(65, len(data)):
             timestamps.append(data.time[i])
             entryprice.append(min(low[i - 1], data.open[i]))
             exitprice.append(min(low[i - 1], data.open[i]))
+            true_index.append(i)
             lasti = i
             currpos = 'sell'
             
@@ -94,6 +92,7 @@ for i in range(65, len(data)):
             signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(max(data.open[i], high[i - 1]))
+            true_index.append(i)
             exitprice.append(max(data.open[i], high[i - 1]))
             lasti = i
             currpos = 'buy'
@@ -107,6 +106,7 @@ for i in range(65, len(data)):
             signal.append('buy')
             timestamps.append(data.time[i])
             entryprice.append(high[i - 1])
+            true_index.append(i)
             lasti = i
             currpos = 'buy'
         elif short(data, i):
@@ -114,12 +114,14 @@ for i in range(65, len(data)):
             lasti = i
             timestamps.append(data.time[i])
             entryprice.append(low[i - 1])
+            true_index.append(i)
             currpos = 'sell'
 
 exitprice.append(None)
 output = pd.DataFrame()
 
 dfdata = {
+    'true_index': true_index,
     'Timestamp': timestamps,
     'Signal': signal,
     'EntryPrice': entryprice,
@@ -129,23 +131,38 @@ dfdata = {
 df = pd.DataFrame(dfdata)
 
 df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-df.set_index('Timestamp', inplace=True)
+#df.set_index('Timestamp', inplace=True)
 df.to_csv('signal.csv')
 
-cumpnl = [0]
 lot = 50 # lot size of nifty in F&O market
+init_capital = 200000
+leverage = 3
+risk = 0.01
+
+cumpnl = [init_capital]
 
 for i in range(len(df) - 1):
+    capital = cumpnl[-1]
+    net_equity = capital * leverage
+    sl = 2 * atr_values[int(df['true_index'][i]-1)]
+    if (df['Signal'][i] == 'buy'):
+        qty1 = ((net_equity * risk / sl) // lot) * lot
+        qty2 = (net_equity // (lot * high[int(df['true_index'][i])-1])) * lot
+    else:
+        qty1 = ((net_equity * risk // sl) // lot) * lot
+        qty2 = (net_equity // (lot * low[int(df['true_index'][i])-1])) * lot
+    finqty = min(qty1, qty2)
     try:
-        pnl = df['ExitPrice'][i] - df['EntryPrice'][i]
+        pnl = (df['ExitPrice'][i] - df['EntryPrice'][i]) * finqty
     except:
-        pnl = float(df['ExitPrice'][i][1:]) - df['EntryPrice'][i]
-    pnl *= lot
+        pnl = (float(df['ExitPrice'][i][1:]) - df['EntryPrice'][i]) * finqty
     if df['Signal'][i] == 'sell':
         pnl *= -1
     cumpnl.append(cumpnl[-1] + pnl)
 
+print(cumpnl[-1])
 dfdata = {
     'trade number': [i for i in range(1, len(df) + 1)],
     'cumulative P&L': cumpnl
 }
+
