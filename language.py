@@ -25,6 +25,7 @@ class Backtest:
         self.index = None
         self.long_strat = long_strat
         self.short_strat = short_strat
+        self.initial_capital = 1000000
 
     def ltohlc(self):
         return self.data[self.index]
@@ -88,6 +89,9 @@ class Backtest:
 
     def cumulative_pnl(self):
         # TODO: implement the function
+        pass
+
+    def stats(self):
         pass
 
 #this file will provide functions that the user can leverage to build their strategy
