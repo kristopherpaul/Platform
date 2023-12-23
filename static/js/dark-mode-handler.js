@@ -2,9 +2,9 @@ const themeSwitch = document.getElementById("theme-switch");
 const themeIndicator = document.getElementById("theme-indicator");
 const page = document.body;
 
-const themeStates = ["light", "dark"]
-const indicators = ["fa-moon", "fa-sun"]
-const pageClass = ["bg-gray-100", "dark-page"]
+const themeStates = ["dark", "light"]
+const indicators = ["fa-sun", "fa-moon"]
+const pageClass = ["dark-page", "bg-gray-100"]
 
 let currentTheme = localStorage.getItem("theme");
 
