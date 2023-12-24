@@ -66,6 +66,9 @@ class TimeArray:
             ret_values.append(self[i] - other[i])
         return TimeArray(ret_values, self.timestamps)
 
+    def tolist(self):
+        return self.values.tolist()
+
 
 class TimeMatrix:
     def __init__(self, data):

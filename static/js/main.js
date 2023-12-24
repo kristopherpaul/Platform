@@ -39,15 +39,57 @@ function simulate(){
             //Blue Area Series
             //const areaSeries = chart.addAreaSeries({ lineColor: '#2962FF', topColor: '#2962FF', bottomColor: 'rgba(41, 98, 255, 0.28)' });
             //Green Area Series
+            
+            // PnL Chart
+            /*
             const areaSeries = chart.addAreaSeries({topColor: 'rgba( 38, 166, 154, 0.28)',	bottomColor: 'rgba( 38, 166, 154, 0.05)', lineColor: 'rgba( 38, 166, 154, 1)', lineWidth: 2, crossHairMarkerVisible: false});
             
             var ts_data = [];
-            for(var i = 0;i < obj.x.length;i++){
-                ts_data.push({value: obj.y[i],time: Date.parse(obj.x[i])/1000});
+            for(var i = 0;i < obj.timestamps.length;i++){
+                ts_data.push({value:obj.cumpnl[i], time:Date.parse(obj.timestamps[i])/1000});
             }
             areaSeries.setData(ts_data);
+            */
 
-            chart.timeScale().fitContent();
+            // Buy/Sell Signal Chart
+            
+            const candleSeries = chart.addCandlestickSeries({upColor: '#26a69a', downColor: '#ef5350', borderVisible: false, wickUpColor: '#26a69a', wickDownColor: '#ef5350',});
+            
+            var ts_data = [];
+            //delta: Higher Delta, faster graphing
+            var delta = 5;
+            var markers = [];
+            var sigptr = 0;
+            for(var i = 0;i < obj.data_timestamps.length;i+=delta){
+                var signal = "";
+                var price = 0;
+                var new_open = obj.open[i];
+                var new_high = obj.high[i];
+                var new_low = obj.low[i];
+                var new_close = obj.close[Math.min(i+delta,obj.data_timestamps.length)-1];
+                for(var j = i;j < Math.min(i+delta,obj.data_timestamps.length);j++){
+                    if(obj.data_timestamps[j] == obj.timestamps[sigptr]){
+                        signal = obj.signal[sigptr];
+                        price = obj.entryprice[sigptr];
+                        sigptr++;
+                    }
+                    new_high = Math.max(new_high,obj.high[j]);
+                    new_low = Math.min(new_low,obj.low[j]);
+                }
+                if(signal == "buy"){
+                    markers.push({time:Date.parse(obj.data_timestamps[i])/1000, position:'belowBar', color:'#2196F3', shape:'arrowUp', text:'Buy @ '+Math.floor(price)});
+                }else if(signal == "sell"){
+                    markers.push({time:Date.parse(obj.data_timestamps[i])/1000, position:'aboveBar', color:'#e91e63', shape:'arrowDown', text:'Sell @ '+Math.floor(price)});
+                }
+                ts_data.push({open: new_open, high: new_high, low: new_low, close: new_close, time: Date.parse(obj.data_timestamps[i])/1000});
+            }
+            candleSeries.setData(ts_data);
+            console.log(markers);
+            candleSeries.setMarkers(markers);
+            
+            //chart.timeScale().fitContent();
+
+
 
             /*var ctx2 = document.getElementById("chart-line").getContext("2d");
 

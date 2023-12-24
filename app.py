@@ -12,6 +12,7 @@ papadata['date'] = papadata['date'] + ' ' + papadata['time']
 date_format = "%d-%m-%y %H:%M"
 papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
 data = TimeMatrix(papadata)
+data_timestamps = list(map(lambda x: pd.to_datetime(x).strftime("%Y-%m-%d %H:%M:%S"),data.time.tolist()))
 
 app = Flask(__name__)
 
@@ -35,7 +36,7 @@ test.timestamps = list(map(lambda x: pd.to_datetime(x).strftime("%Y-%m-%d %H:%M:
 """
         full_code = request.get_data().decode("utf-8")+extra_code
         exec(full_code,globals())
-        ret = json.dumps({"x":test.timestamps,"y":cumpnl})
+        ret = json.dumps({"timestamps":test.timestamps,"cumpnl":cumpnl,"signal":test.signal,"entryprice":test.entryprice,"data_timestamps":data_timestamps,"open":data.open.tolist(),"high":data.high.tolist(),"low":data.low.tolist(),"close":data.close.tolist()})
         return ret
     return render_template('dashboard.html')
 
