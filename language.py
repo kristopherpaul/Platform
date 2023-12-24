@@ -5,6 +5,7 @@ Notes:
 3. Same with Order, maybe can just get away with a tuple
 4. TODO: implement the functionality for having multiple orders and positions at once
 5. Maybe a way to handle indicators used by the user without passing in the index
+6. DEMO
 """
 from data_structures import *
 
