@@ -3,7 +3,7 @@ body {
 }
 
 body.dark-page {
-background-color: #283149;
+background-color: #1e1e2e;
 color: #d7d7d7 !important;
 color: #d7d7d7 !important;
 }
@@ -17,14 +17,14 @@ body.dark-page .text-gradient.text-dark {
 background-image: linear-gradient(310deg, #a8a8a8, #ffffff);
 }
 body.dark-page .fixed-plugin .fixed-plugin-button {
-background-color: #283149;
+background-color: #1e1e2e;
 color: #d7d7d7 !important;
 }
 body.dark-page .sidenav-header .navbar-brand {
 color: #fff !important;
 }
 body.dark-page .card, body.dark-page .card-header {
-background-color: #404B69 !important;
+background-color: #27293d !important;
 }
 body.dark-page h6, body.dark-page .h6, body.dark-page h5, body.dark-page .h5, body.dark-page h4, body.dark-page .h4, body.dark-page h3, body.dark-page .h3, body.dark-page h2, body.dark-page .h2, body.dark-page h1, body.dark-page .h1 {
 color: #fff !important;
@@ -39,29 +39,29 @@ body.dark-page .table > :not(:last-child) > :last-child > * {
 border-bottom-color: rgba(85, 119, 154, 0.2784313725);
 }
 body.dark-page .dropdown-menu {
-background-color: #283149;
+background-color: #1e1e2e;
 color: #d7d7d7 !important;
 }
 body.dark-page .dropdown-menu:before {
-color: #283149 !important;
+color: #1e1e2e !important;
 }
 body.dark-page .dropdown-menu a {
 color: #d7d7d7 !important;
 }
 body.dark-page .dropdown-menu .dropdown-item:hover, body.dark-page .dropdown-menu .dropdown-item:focus {
-background-color: #404B69;
+background-color: #27293d;
 }
 body.dark-page .input-group span, body.dark-page .input-group input {
 background-color: rgba(40, 49, 73, 0.6);
 border-color: rgba(40, 49, 73, 0.8) !important;
 }
 body.dark-page .navbar-main:not(.bg-transparent) .input-group span, body.dark-page .navbar-main:not(.bg-transparent) .input-group input {
-background-color: #404B69 !important;
-border-color: #283149;
+background-color: #27293d !important;
+border-color: #1e1e2e;
 }
 body.dark-page .navbar-main.blur {
-background-color: rgba(64, 75, 105, 0.5) !important;
-border-color: #283149;
+background-color: /*rgba(64, 75, 105, 0.5)*/#27293d !important;
+border-color: #1e1e2e;
 box-shadow: none !important;
 }
 body.dark-page .navbar-main.blur .nav-link {
@@ -71,7 +71,7 @@ body.dark-page .navbar-main.blur .sidenav-toggler-line.bg-dark {
 background-color: #d7d7d7 !important;
 }
 body.dark-page .sidenav .nav-link.active {
-background-color: #404B69 !important;
+background-color: #27293d !important;
 color: #fff !important;
 }
 body.dark-page .list-group-item {
@@ -91,7 +91,7 @@ color: #d7d7d7 !important;
 }
 body.dark-page .moving-tab .nav-link.active {
 box-shadow: 0 1px 5px 1px rgba(55, 68, 104, 0.8784313725);
-background: #283149;
+background: #1e1e2e;
 }
 body.dark-page .shadow-blur {
 box-shadow: inset 0 0 2px rgba(254, 254, 254, 0.82) !important;
@@ -101,7 +101,7 @@ border-color: rgba(36, 39, 57, 0.95);
 background-color: rgba(36, 39, 57, 0.95);
 }
 body.dark-page .navbar.blur-rounded {
-background-color: rgba(64, 75, 105, 0.8) !important;
+background-color: hsla(224, 24%, 33%, 0.8) !important;
 }
 body.dark-page .navbar.blur-rounded .navbar-brand {
 color: #fff !important;
@@ -119,9 +119,9 @@ border-color: rgba(64, 75, 105, 0.6);
 body.dark-page input.form-control:focus {
 color: #d7d7d7 !important;
 background-color: rgba(40, 49, 73, 0.6);
-border-color: #283149;
+border-color: #1e1e2e;
 outline: 0;
-box-shadow: 0 0 0 2px #283149;
+box-shadow: 0 0 0 2px #1e1e2e;
 }
 body.dark-page .progress {
 background-color: rgba(39, 48, 71, 0.6705882353) !important;
@@ -130,4 +130,15 @@ body.dark-page .btn-outline-dark {
 color: white;
 border-color: white;
 }
+body.dark-page .form-select {
+color: white;
+border-color: white;
+background: #27293d url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'><path fill='%23ffffff' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>") right .75rem center/8px 10px no-repeat!important;
+}
+body.dark-page .btn-outline-dark:hover:not(.active) {
+    background-color: transparent;
+    opacity: .75;
+    box-shadow: none;
+    color: #fff;
+  }
 /*# sourceMappingURL=dark-theme-core.css.map */
