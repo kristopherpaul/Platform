@@ -16,7 +16,7 @@ papadata['time'] = papadata['time'].apply(lambda x: f"{x[0:2]}:{x[2:]}")
 papadata['date'] = papadata['date'] + ' ' + papadata['time']
 date_format = "%d-%m-%y %H:%M"
 papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
-data = TimeMatrix(papadata)
+data = OHLC(papadata)
 # -------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -26,7 +26,7 @@ class Order:
         self.price = price
 
 class Backtest:
-    def __init__(self, long_strat, short_strat, data: TimeMatrix):
+    def __init__(self, long_strat, short_strat, data: OHLC):
         self.signal = []
         self.data = data
         self.timestamps = []
@@ -47,9 +47,9 @@ class Backtest:
 
     def check_order(self):
         if self.current_order.order_type == "buy" and self.long_strat(self.ltohlc(), self.index) is None:
-                self.current_order = None
+            self.current_order = None
         elif self.current_order.order_type == "sell" and self.short_strat(self.ltohlc(), self.index) is None:
-                self.current_order = None
+            self.current_order = None
 
     def execute_order(self):
         if self.current_order.order_type == "buy":
@@ -106,11 +106,7 @@ class Backtest:
     def stats(self):
         pass
 
-class Strategy:
-    def __init__(self):
-        self.orders = None
-        self.positions = None
-        self.signal_data = {"timestamps": [], "signal": [], "EntryPrice": [], "ExitPrice": []}
-        self.data = data
-
-    def place_order()
+open = data.open
+high = data.high
+low = data.low
+close = data.close

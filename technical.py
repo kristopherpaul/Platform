@@ -5,7 +5,7 @@ TODO: make naming more consistent
 from data_structures import *
 from numpy import Inf
 
-def true_high(data: TimeMatrix):
+def true_high(data: OHLC):
     values = [data.high[0]]
     for i in range(1, len(data)):
         if data.close[i - 1] > data.high[i]:
@@ -14,7 +14,7 @@ def true_high(data: TimeMatrix):
             values.append(data.high[i])
     return TimeArray(values, data.time)
 
-def true_low(data: TimeMatrix):
+def true_low(data: OHLC):
     values = [data.low[0]]
     for i in range(1, len(data)):
         if data.close[i - 1] < data.low[i]:
@@ -23,7 +23,7 @@ def true_low(data: TimeMatrix):
             values.append(data.low[i])
     return TimeArray(values, data.time)
 
-def true_range(data: TimeMatrix):
+def true_range(data: OHLC):
     return true_high(data) - true_low(data)
 
 def avg(x: TimeArray, period: int):
@@ -38,7 +38,7 @@ def avg(x: TimeArray, period: int):
         window_sum -= x[j - period + 1]
     return TimeArray(values, x.timestamps)
 
-def atr(data: TimeMatrix, period):
+def atr(data: OHLC, period):
     tr = true_range(data)
     return avg(tr, period)
 

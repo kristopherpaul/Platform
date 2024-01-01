@@ -11,7 +11,7 @@ papadata['time'] = papadata['time'].apply(lambda x: f"{x[0:2]}:{x[2:]}")
 papadata['date'] = papadata['date'] + ' ' + papadata['time']
 date_format = "%d-%m-%y %H:%M"
 papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
-data = TimeMatrix(papadata)
+data = OHLC(papadata)
 data_timestamps = list(map(lambda x: pd.to_datetime(x).strftime("%Y-%m-%d %H:%M:%S"),data.time.tolist()))
 
 app = Flask(__name__)

@@ -1,4 +1,6 @@
 ideas.md
 signal.csv
-temp.py
+temp*.py
 __pycache__/
+settings.json
+.vscode

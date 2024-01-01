@@ -69,8 +69,15 @@ class TimeArray:
     def tolist(self):
         return self.values.tolist()
 
+class OHLCvalue:
+    def __init__(self, time, open, high, low, close):
+        self.time = time
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
 
-class TimeMatrix:
+class OHLC:
     def __init__(self, data):
         """ 
         data must have a time column indexed by 'time'
@@ -85,11 +92,7 @@ class TimeMatrix:
         self.step = self.time[1] - self.time[0]
 
     def __getitem__(self, i):
-        return { "timestamp": self.time[i],
-                 "open": self.open[i],
-                 "high": self.high[i],
-                 "low": self.low[i],
-                 "close": self.close[i] }
+        return 
 
     def __len__(self):
         return len(self.open)
