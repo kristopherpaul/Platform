@@ -98,7 +98,7 @@ class OHLC:
         self.step = self.time[1] - self.time[0]
 
     def __getitem__(self, i):
-        return OHLCvalue(self.time, self.open, self.high, self.low, self.close)
+        return OHLCvalue(self.time[i], self.open[i], self.high[i], self.low[i], self.close[i])
 
     def __len__(self):
         return len(self.open)
