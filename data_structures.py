@@ -61,12 +61,18 @@ class TimeArray:
     
     def __sub__(self, other):
         # TODO: handle errors when self and other is not compatible
-        ret_values = []
-        for i in range(len(self)):
-            ret_values.append(self[i] - other[i])
-        return TimeArray(ret_values, self.timestamps)
+        return TimeArray(self.values - other.values, self.timestamps)
 
-    def tolist(self):
+    def __add__(self, other):
+        return TimeArray(self.values + other.values, self.timestamps)
+    
+    def __mul__(self, other):
+        return TimeArray(self.values * other.values, self.timestamps)
+
+    def __div__(self, other):
+        return TimeArray(self.values / other.values)
+
+    def _tolist(self):
         return self.values.tolist()
 
 class OHLCvalue:

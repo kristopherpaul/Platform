@@ -18,11 +18,6 @@ expavg = xavg(data.close, 65)
 high = highest(data.high, 10)
 low = lowest(data.low, 10)
 
-"""
-def long_when():
-        
-"""
-
 def long(ltp, i):
     if ltp["close"] > expavg[i]:
         return high[i]

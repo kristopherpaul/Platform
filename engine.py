@@ -167,19 +167,69 @@ class Root:
 
         self.ta = Technical()
 
+    #def initialize(self):
+    #    self.sma_10 = self.ta.avg(self.close, 10)
+    #    self.sma_50 = self.ta.avg(self.close, 50)
+
+    #def strategy(self):
+    #    if (self.close[0] < self.sma_10[1]):
+    #        print(f"buy at {self.close[0]}")
+        
+    #def run(self):
+    #    self.initialize()
+    #    for self.index in range(0, len(data)):
+    #        self.strategy()
+
+class Strategy(Root):
+    def __init__(self, data):
+        self.current_order = None
+        self.current_position = None
+        self.signals = []
+        self.entryprice = []
+        self.exitprice = []
+        self.timestamps = []
+        super().__init__(data)
+
+    @abstractmethod
     def initialize(self):
-        self.sma_10 = self.ta.avg(self.close, 10)
-        self.sma_50 = self.ta.avg(self.close, 50)
+        pass
 
-    def strategy(self):
-        if (self.close[0] < self.sma_10[1]):
-            print(f"buy at {self.close[0]}")
-        
+    @abstractmethod
+    def next(self):
+        pass
+
+    def _market_order(self, type, name):
+        self.current_position = (type, self.close[0], name)
+
+    def _limit_order(self, type, limit, name):
+        self.current_order = (type, 'limit', limit, name)
+
+    def check_order(self):
+        if self.current_order[1] == 'limit':
+            if self.current_Order[0] == 'long' and self.low[0] < self.current_order[2]:
+                self.signals.append('buy')
+                self.current_order = None
+                if self.open[0] < self.current_order[2]:
+                    self.current_position = (type, self.open[0])
+                    self.entryprice.append(self.open[0])
+                else:
+                    self.current_position = (type, self.current_order[2])
+                    self.entryprice.append(self.current_order[2])
+            elif self.current_Order[0] == 'short' and self.high[0] > self.current_order[2]:
+                self.signals.append('sell')
+                self.current_order = None
+                if self.open[0] > self.current_order[2]:
+                    self.current_position = (type, self.open[0])
+                    self.entryprice.append(self.open[0])
+                else:
+                    self.current_position = (type, self.current_order[2])
+                    self.entryprice.append(self.current_order[2])
+
+    def entry(self, name, type, limit=None):
+        if limit:
+            self._limit_order(type, limit, name)
+        else:
+            self._market_order(type, name)
+
     def run(self):
-        self.initialize()
-        for self.index in range(0, len(data)):
-            self.strategy()
-
-        
-m = Root(data = data)
-m.run()
+        pass
