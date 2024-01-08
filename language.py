@@ -53,7 +53,7 @@ class Backtest:
 
     def execute_order(self):
         if self.current_order.order_type == "buy":
-            if self.ltohlc.high > self.current_order.price + 0.05:
+            if self.ltohlc().high > self.current_order.price + 0.05:
                 self.signal.append('buy')
                 self.timestamps.append(self.data.time[self.index])
                 self.entryprice.append(self.current_order.price)
@@ -62,7 +62,7 @@ class Backtest:
                 self.current_position = "buy"
                 self.current_order = None
         else:
-            if self.ltohlc.low < self.current_order.price - 0.05:
+            if self.ltohlc().low < self.current_order.price - 0.05:
                 self.signal.append('sell')
                 self.timestamps.append(self.data.time[self.index])
                 self.entryprice.append(self.current_order.price)

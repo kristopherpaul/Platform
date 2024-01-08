@@ -19,12 +19,12 @@ high = highest(data.high, 10)
 low = lowest(data.low, 10)
 
 def long(ltp, i):
-    if ltp["close"] > expavg[i]:
+    if ltp.close > expavg[i]:
         return high[i]
     return None
 
 def short(ltp, i):
-    if ltp["close"] < expavg[i]:
+    if ltp.close < expavg[i]:
         return low[i]
     return None
 
