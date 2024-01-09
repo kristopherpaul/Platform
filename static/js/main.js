@@ -154,3 +154,51 @@ function goFullScreen(buttonElement, elementId){
     area.width = window.innerWidth;
     area.height = window.innerHeight;
 }
+
+function handleCodeSection(buttonElement){
+    if(buttonElement.id == "codeopt"){
+        let codeElement = document.getElementById("codesec");
+        let codeaiElement = document.getElementById("codeaisec");
+        codeaiElement.style.display = "none";
+        codeElement.style.display = "";
+    }else if(buttonElement.id == "codeaiopt"){
+        let codeElement = document.getElementById("codesec");
+        let codeaiElement = document.getElementById("codeaisec");
+        codeElement.style.display = "none";
+        codeaiElement.style.display = "";
+    }
+}
+
+function sendMessage(){
+    let msg = document.getElementById("codeaiMessage");
+    let chatSec = document.getElementById("codeaichat");
+    chatSec.innerHTML += `
+    <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+        <div>
+        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">`+msg.value+`</p>
+        </div>
+        <img src="static/img/user-logo.jpg"
+        alt="user logo" style="width: 35px; height: 100%; border-radius: 50%;">
+    </div>`;
+    //alert(msg.value);
+    $.ajax({
+        url: "/chat",
+        method: "POST",        
+        data: msg.value,
+        timeout: 20000,
+        success: function(data){
+            var obj = JSON.parse(data);
+            chatSec.innerHTML += `
+            <div class="d-flex flex-row justify-content-start">
+                <img src="static/img/chat-gpt-logo.jpg"
+                alt="gpt logo" style="width: 35px; height: 100%; border-radius: 50%;">
+                <div>
+                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">`+obj["message"]+`</p>
+                </div>
+            </div>`;
+        },
+        error: function(errMsg){
+            alert("Error"+errMsg);
+        }
+    });
+}

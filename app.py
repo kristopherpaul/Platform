@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import json
+#from langchain_openai.chat_models import ChatOpenAI
+#from langchain.schema import HumanMessage
+import cohere
 
 import pandas as pd
 from technical import *
@@ -39,6 +42,20 @@ test.timestamps = list(map(lambda x: pd.to_datetime(x).strftime("%Y-%m-%d %H:%M:
         ret = json.dumps({"timestamps":test.timestamps,"cumpnl":cumpnl,"signal":test.signal,"entryprice":test.entryprice,"data_timestamps":data_timestamps,"open":data.open.tolist(),"high":data.high.tolist(),"low":data.low.tolist(),"close":data.close.tolist()})
         return ret
     return render_template('dashboard.html')
+
+@app.route('/chat', methods=['GET', 'POST'])
+def llm_interact():
+    if request.method == "POST":
+        message = request.get_data().decode("utf-8")
+        co = cohere.Client('D66in2vKC1q6ap86g3xxdVbQoOk2ZyaKCNpmjMKB')
+        response = co.chat(
+            message, 
+            model="command", 
+            temperature=0.9
+        )
+        reply = response.text
+        #reply = message
+        return json.dumps({'message': reply})
 
 @app.route('/login')
 def login():
