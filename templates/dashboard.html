@@ -175,23 +175,12 @@ high = highest(data.high, 10)
 low = lowest(data.low, 10)
 
 def long(ltp, i):
-    if ltp["close"] > expavg[i]:
+    if ltp.close > expavg[i]:
         return high[i]
 
 def short(ltp, i):
-    if ltp["close"] < expavg[i]:
-        return low[i]
-              </div>
-            </div>
-            <div id="codeaisec" class="tab-pane fade in active show">
-                <div data-mdb-perfect-scrollbar="true" style="position: relative; height: 540px;overflow-y: auto" id="codeaichat">
-                </div>
-                <div class="text-muted d-flex justify-content-start align-items-center p-3">
-                  <input type="text" class="form-control form-control-lg" id="codeaiMessage"
-                    placeholder="Type message">
-                  <a class="ms-3" href="#" onclick="sendMessage();"><i class="fas fa-paper-plane"></i></a>
-                </div>
-            </div>
+    if ltp.close < expavg[i]:
+        return low[i]</div>
           </div>
           </div>
           </div>

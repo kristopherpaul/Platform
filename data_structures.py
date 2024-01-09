@@ -61,16 +61,29 @@ class TimeArray:
     
     def __sub__(self, other):
         # TODO: handle errors when self and other is not compatible
-        ret_values = []
-        for i in range(len(self)):
-            ret_values.append(self[i] - other[i])
-        return TimeArray(ret_values, self.timestamps)
+        return TimeArray(self.values - other.values, self.timestamps)
 
-    def tolist(self):
+    def __add__(self, other):
+        return TimeArray(self.values + other.values, self.timestamps)
+    
+    def __mul__(self, other):
+        return TimeArray(self.values * other.values, self.timestamps)
+
+    def __div__(self, other):
+        return TimeArray(self.values / other.values)
+
+    def _tolist(self):
         return self.values.tolist()
 
+class OHLCvalue:
+    def __init__(self, time, open, high, low, close):
+        self.time = time
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
 
-class TimeMatrix:
+class OHLC:
     def __init__(self, data):
         """ 
         data must have a time column indexed by 'time'
@@ -85,11 +98,7 @@ class TimeMatrix:
         self.step = self.time[1] - self.time[0]
 
     def __getitem__(self, i):
-        return { "timestamp": self.time[i],
-                 "open": self.open[i],
-                 "high": self.high[i],
-                 "low": self.low[i],
-                 "close": self.close[i] }
+        return OHLCvalue(self.time[i], self.open[i], self.high[i], self.low[i], self.close[i])
 
     def __len__(self):
         return len(self.open)

@@ -9,7 +9,7 @@ papadata['time'] = papadata['time'].apply(lambda x: f"{x[0:2]}:{x[2:]}")
 papadata['date'] = papadata['date'] + ' ' + papadata['time']
 date_format = "%d-%m-%y %H:%M"
 papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
-data = TimeMatrix(papadata)
+data = OHLC(papadata)
 
 expavg = xavg(data.close, 65)
 high = highest(data.high, 10)
@@ -21,7 +21,7 @@ atr_values = atr(data, 20)
 
 transit = None
 
-def long(data: TimeMatrix, i: int): 
+def long(data: OHLC, i: int): 
     global transit
     if data.close[i] > expavg[i] and transit != 'buy':
         transit = 'buy'
@@ -35,7 +35,7 @@ def long(data: TimeMatrix, i: int):
         return False
     return False
 
-def short(data: TimeMatrix, i: int):
+def short(data: OHLC, i: int):
     global transit
     if data.close[i] < expavg[i] and transit != 'sell':
         transit = 'sell'
@@ -49,13 +49,13 @@ def short(data: TimeMatrix, i: int):
         return False
     return False
 
-def stoploss_long(data: TimeMatrix, entryprice, i, curri):
+def stoploss_long(data: OHLC, entryprice, i, curri):
     lx2n = entryprice - 2 * atr_values[i]
     if data[curri]["low"] <= lx2n:
         return lx2n
     return None
 
-def stoploss_short(data: TimeMatrix, entryprice, i, curri):
+def stoploss_short(data: OHLC, entryprice, i, curri):
     lx2n = entryprice + 2 * atr_values[i]
     if data[curri]["high"] >= lx2n:
         return lx2n

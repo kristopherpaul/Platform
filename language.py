@@ -7,6 +7,18 @@ Notes:
 5. Maybe a way to handle indicators used by the user without passing in the index
 """
 from data_structures import *
+import pandas as pd
+
+# ---------------------------------------------------Preprocessing---------------------------------------------------------------
+papadata = pd.read_csv('NIFTNEAR.csv')
+papadata['time'] = papadata['time'].apply(lambda x: "0" * (4 - len(str(x))) + str(x))
+papadata['time'] = papadata['time'].apply(lambda x: f"{x[0:2]}:{x[2:]}")
+papadata['date'] = papadata['date'] + ' ' + papadata['time']
+date_format = "%d-%m-%y %H:%M"
+papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
+data = OHLC(papadata)
+# -------------------------------------------------------------------------------------------------------------------------------
+
 
 class Order:
     def __init__(self, order_type, price):
@@ -14,7 +26,7 @@ class Order:
         self.price = price
 
 class Backtest:
-    def __init__(self, long_strat, short_strat, data: TimeMatrix):
+    def __init__(self, long_strat, short_strat, data: OHLC):
         self.signal = []
         self.data = data
         self.timestamps = []
@@ -35,13 +47,13 @@ class Backtest:
 
     def check_order(self):
         if self.current_order.order_type == "buy" and self.long_strat(self.ltohlc(), self.index) is None:
-                self.current_order = None
+            self.current_order = None
         elif self.current_order.order_type == "sell" and self.short_strat(self.ltohlc(), self.index) is None:
-                self.current_order = None
+            self.current_order = None
 
     def execute_order(self):
         if self.current_order.order_type == "buy":
-            if self.ltohlc()["high"] > self.current_order.price + 0.05:
+            if self.ltohlc().high > self.current_order.price + 0.05:
                 self.signal.append('buy')
                 self.timestamps.append(self.data.time[self.index])
                 self.entryprice.append(self.current_order.price)
@@ -50,7 +62,7 @@ class Backtest:
                 self.current_position = "buy"
                 self.current_order = None
         else:
-            if self.ltohlc()["low"] < self.current_order.price - 0.05:
+            if self.ltohlc().low < self.current_order.price - 0.05:
                 self.signal.append('sell')
                 self.timestamps.append(self.data.time[self.index])
                 self.entryprice.append(self.current_order.price)
@@ -94,37 +106,7 @@ class Backtest:
     def stats(self):
         pass
 
-#this file will provide functions that the user can leverage to build their strategy
-#
-#import matplotlib.pyplot as plt
-#import numpy as np
-#
-#class Strategy:
-#    def __init__(self, name, universe, criteria=None, qty_type=None):
-#        pass
-#
-#    def entry(self, id, direction, qty, limit=None):
-#        pass
-#
-#    def exit(self, id, from_entry, qty, take_profit=None, stop_loss=None):
-#        pass
-#
-#    def param(self, id, value, optimize=False):
-#        pass
-#
-#
-#def plot(data1, data2):
-#    plt.plot(data1)
-#    plt.plot(data2)
-#    plt.show()
-#
-#def sma(data, column, window):
-#    new_data = data.copy()
-#    new_data[f'SMA_{window}'] = data[column].rolling(window).mean()
-#    return new_data
-#
-#def ema(data, column, alpha):
-#    new_data = data.copy()
-#    new_data[f'EMA_{alpha}'] = data[column].ewm(alpha=alpha, adjust=False).mean()
-#    return new_data
-
+open = data.open
+high = data.high
+low = data.low
+close = data.close

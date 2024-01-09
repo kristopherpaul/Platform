@@ -11,7 +11,7 @@ papadata['time'] = papadata['time'].apply(lambda x: f"{x[0:2]}:{x[2:]}")
 papadata['date'] = papadata['date'] + ' ' + papadata['time']
 date_format = "%d-%m-%y %H:%M"
 papadata['date'] = (papadata['date'].apply(lambda x: datetime.datetime.strptime(x, date_format).replace(tzinfo=None)))
-data = TimeMatrix(papadata)
+data = OHLC(papadata)
 # -------------------------------------------------------------------------------------------------------------------------------
 
 expavg = xavg(data.close, 65)
@@ -19,12 +19,12 @@ high = highest(data.high, 10)
 low = lowest(data.low, 10)
 
 def long(ltp, i):
-    if ltp["close"] > expavg[i]:
+    if ltp.close > expavg[i]:
         return high[i]
     return None
 
 def short(ltp, i):
-    if ltp["close"] < expavg[i]:
+    if ltp.close < expavg[i]:
         return low[i]
     return None
 
