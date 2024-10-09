@@ -14,6 +14,7 @@ Our revolutionary trading platform democratizes modern-day trading tools for pro
 ### 1.3 Current Status
 Currently, we are in the development phase, targeting a demo prototype by the end of the first week of January 2024. A sample of how the demo platform might look is shown below:
 
+![image](https://github.com/user-attachments/assets/2af26cbd-941b-4d75-a76a-8706769e1bc2)
 _Figure 1: The strategy creation page of our platform_
 
 ---
@@ -61,6 +62,7 @@ Traders of all levels, from novice to expert, from programmers to non-programmer
 ### 5.3 Competitor Analysis
 While some competitors in the Indian Market provide options for traders familiar with programming, their platforms are harder to use and ignore the needs of traders without coding experience. Our platform, as shown in Figure 2, is much easier to use compared to competitors such as AlgoBulls.
 
+![image](https://github.com/user-attachments/assets/e0870754-ac4c-417c-931d-13ed2154a921)
 _Figure 2: MACD Strategy on competitor’s platform versus our platform_
 
 ---
